@@ -9,6 +9,7 @@ gem 'sqlite3'
 gem 'annotate', '~> 2.5.0'
 gem 'haml-rails'
 gem 'jquery-rails'
+gem 'telapi'
 
 # Gems used only for assets and not required
 # in production environments by default.
