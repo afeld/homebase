@@ -33,7 +33,7 @@ class TelApiController < ApplicationController
   def check_for_unsubscribe(body)
     unsubscribe = false
     UNSUB_KEYWORDS.each do |kw|
-      if body == kw
+      if body == '#' + kw
          unsubscribe = true
       end
     end
