@@ -1,18 +1,31 @@
 class TelApiController < ApplicationController
   skip_before_filter :verify_authenticity_token
   
-  UNSUB_KEYWORDS = ['unsub', 'unsubscribe', 'quit', 'stop', 'Stop', 'Quit', 'Unsubscribe', 'Unsub', 'Unsubscribe.', 'Unsub.', 'Stop.', 'Quit.']
   HELP_TEXT = "help"
   UNSUBSCRIBE_MESSAGE = "You have been unsubscribed. :("
   
   def receive_text
-    message_body = params["Body"]
-    message_body.strip!
+    message_body = params["Body"].strip
     from_number = params["From"]
     
-    user = User.find_or_create_by_phone_number(from_number)
-    unsubscribe = check_for_unsubscribe(message_body)
-    
+    user = User.find_or_create_by_mobile_number(from_number)
+
+    case message_body.downcase
+    when /^#?(unsub(scribe)?|quit|stop)\.?$/
+      # unsubscribe
+      user.destroy
+    when /^#?help|(help$)/
+      HELP_TEXT
+    when /^#list|(list$)/
+      # TODO list users in building
+    when /^@all/
+      # TODO msg. all in building
+    when /^@(?<unit_number>\S+)/
+      # TODO DM unit in building
+    else
+      # TODO follow-up (all or DM)
+    end
+  end
   
   def message_unit(unit, message)
     
@@ -24,20 +37,6 @@ class TelApiController < ApplicationController
   
   def get_directory
     
-  end
-  
-  def get_help
-    HELP_TEXT
-  end
-  
-  def check_for_unsubscribe(body)
-    unsubscribe = false
-    UNSUB_KEYWORDS.each do |kw|
-      if body == '#' + kw
-         unsubscribe = true
-      end
-    end
-    return unsubscribe
   end
   
 end
