@@ -25,6 +25,7 @@ class TelApiController < ApplicationController
     else
       # TODO follow-up (all or DM)
     end
+     Telapi::InboundXml.new.response
   end
   
   def get_directory
