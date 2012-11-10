@@ -6,9 +6,10 @@
 #  unit_id       :integer
 #  first_name    :string(255)
 #  last_name     :string(255)
-#  mobile_number :integer
+#  mobile_number :string(255)
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  active        :boolean
 #
 
 require 'spec_helper'

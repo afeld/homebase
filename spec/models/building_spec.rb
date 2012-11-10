@@ -8,7 +8,7 @@
 #  street        :string(255)
 #  city          :string(255)
 #  state         :string(255)
-#  zip           :integer
+#  zip           :string(255)
 #  country       :string(255)
 #  lat           :float
 #  lng           :float
