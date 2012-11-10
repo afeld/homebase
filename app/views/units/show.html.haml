@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Building:
+  = @unit.building_id
+%p
+  %b Number:
+  = @unit.number
+
+= link_to 'Edit', edit_unit_path(@unit)
+\|
+= link_to 'Back', units_path

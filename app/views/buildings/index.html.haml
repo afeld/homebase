@@ -1,0 +1,35 @@
+%h1 Listing buildings
+
+%table
+  %tr
+    %th Name
+    %th Street number
+    %th Street
+    %th City
+    %th State
+    %th Zip
+    %th Country
+    %th Lat
+    %th Lng
+    %th
+    %th
+    %th
+
+  - @buildings.each do |building|
+    %tr
+      %td= building.name
+      %td= building.street_number
+      %td= building.street
+      %td= building.city
+      %td= building.state
+      %td= building.zip
+      %td= building.country
+      %td= building.lat
+      %td= building.lng
+      %td= link_to 'Show', building
+      %td= link_to 'Edit', edit_building_path(building)
+      %td= link_to 'Destroy', building, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Building', new_building_path

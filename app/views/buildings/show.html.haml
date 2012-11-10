@@ -1,0 +1,33 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @building.name
+%p
+  %b Street number:
+  = @building.street_number
+%p
+  %b Street:
+  = @building.street
+%p
+  %b City:
+  = @building.city
+%p
+  %b State:
+  = @building.state
+%p
+  %b Zip:
+  = @building.zip
+%p
+  %b Country:
+  = @building.country
+%p
+  %b Lat:
+  = @building.lat
+%p
+  %b Lng:
+  = @building.lng
+
+= link_to 'Edit', edit_building_path(@building)
+\|
+= link_to 'Back', buildings_path
