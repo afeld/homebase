@@ -5,7 +5,7 @@ class TelApiController < ApplicationController
   UNSUBSCRIBE_MESSAGE = "You have been unsubscribed. :("
   
   def receive_text
-    message_body = params["Body"].strip
+    message_body = params["Body"].to_s.strip
     from_number = params["From"]
     
     user = User.find_or_create_by_mobile_number(from_number)
