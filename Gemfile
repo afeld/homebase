@@ -6,6 +6,7 @@ gem 'rails', '3.2.8'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
+gem 'annotate', '~> 2.5.0'
 gem 'haml-rails'
 gem 'jquery-rails'
 
