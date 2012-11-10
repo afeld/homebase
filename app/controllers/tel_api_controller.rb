@@ -10,23 +10,31 @@ class TelApiController < ApplicationController
     
     user = User.find_or_create_by_mobile_number(from_number)
 
-    case message_body.downcase
-    when /^#?(unsub(scribe)?|quit|stop)\.?$/
-      # unsubscribe
-      user.destroy
-    when /^#help|(help$)/
-      HELP_TEXT
-    when /^#list|(list$)/
-      # TODO list users in building
-    when /^@all/
-      # TODO msg. all in building
-    when /^@(?<unit_number>\S+)/
-      # TODO DM unit in building
-    else
-      # TODO follow-up (all or DM)
-    end
+    ix =
+      case message_body.downcase
+      when /^#?(unsub(scribe)?|quit|stop)\.?$/
+        # unsubscribe
+        user.destroy
+        Telapi::InboundXml.new
+      when /^#help|(help$)/
+        Telapi::InboundXml.new do
+          Sms(
+            HELP_TEXT,
+            from: TEL_NUMBER,
+            to: from_number
+          )
+        end
+      when /^#list|(list$)/
+        # TODO list users in building
+      when /^@all/
+        # TODO msg. all in building
+      when /^@(?<unit_number>\S+)/
+        # TODO DM unit in building
+      else
+        # TODO follow-up (all or DM)
+      end
 
-    render text: Telapi::InboundXml.new.response
+    render text: ix.response
   end
   
   def get_directory
