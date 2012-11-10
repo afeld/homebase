@@ -18,6 +18,40 @@
 
 class Building < ActiveRecord::Base
   attr_accessible :city, :country, :lat, :lng, :name, :state, :street, :street_number, :zip
+
   has_many :units
-  has_many :users, through: :users 
+  has_many :users, through: :users
+
+  validate :state, length: 2
+
+  geocoded_by :address
+  reverse_geocoded_by :lat, :lng
+  after_validation :geocode, :reverse_geocode
+
+
+  def address
+    # match Geocoder::Result::Google#formatted_address
+    "#{street_number} #{street}, #{city}, #{state} #{zip}, #{country}"
+  end
+
+  class << self
+    def new_from_text text
+      result = Geocoder.search(text).first
+
+      if result
+        Building.new(
+          street_number: result.address_components_of_type(:street_number).first['short_name'],
+          street: result.address_components_of_type(:route).first['short_name'],
+          city: result.city,
+          state: result.state_code,
+          zip: result.postal_code,
+          country: result.country_code,
+          lat: result.latitude,
+          lng: result.longitude
+        )
+      else
+        nil
+      end
+    end
+  end
 end

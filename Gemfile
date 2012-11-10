@@ -10,6 +10,8 @@ gem 'annotate', '~> 2.5.0'
 gem 'haml-rails'
 gem 'jquery-rails'
 
+gem 'geocoder'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
