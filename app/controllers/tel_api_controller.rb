@@ -6,7 +6,7 @@ class TelApiController < ApplicationController
   
   def receive_text
     message_body = params["Body"].to_s.strip
-    from_number = params["From"]
+    from_number = params["From"].to_s
     
     user = User.find_or_create_by_mobile_number(from_number)
 
