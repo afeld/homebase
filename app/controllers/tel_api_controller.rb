@@ -40,7 +40,7 @@ class TelApiController < ApplicationController
 
       else # no unit
         # incomplete registration
-        result = Geocoder.search(text).first
+        result = Geocoder.search(message_body).first
         user.unit = Unit.create_from_result(result) if result
         
         if user.unit
