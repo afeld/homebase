@@ -17,7 +17,7 @@ class Unit < ActiveRecord::Base
   
   class << self
     def create_from_result result
-      unit_num = result.address_components_of_type(:subpremise).first['short_name']
+      unit_num = result.address_components_of_type(:subpremise).first['short_name'] rescue nil
       if unit_num
         building = Building.create_from_result(result)
         Unit.create!(
