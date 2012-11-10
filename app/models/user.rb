@@ -15,11 +15,10 @@ class User < ActiveRecord::Base
   attr_accessible :first_name, :last_name, :mobile_number, :unit_id
   belongs_to :unit
   has_one :building, through: :unit
-  
-  def self.active_users
-    find :all, :conditions => ['active = ?', true]
-  end
-  
+
+  scope :without, lambda { |user| where('id <> ?', user.id) }
+
+
   def disable!
     self.active = false
     self.save
@@ -34,5 +33,5 @@ class User < ActiveRecord::Base
     self.active = true
     self.save
   end
-  
+
 end

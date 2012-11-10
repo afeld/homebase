@@ -20,7 +20,7 @@ class Building < ActiveRecord::Base
   attr_accessible :city, :country, :lat, :lng, :name, :state, :street, :street_number, :zip
 
   has_many :units, dependent: :destroy
-  has_many :users, through: :users
+  has_many :users, through: :units
 
   validate :state, length: 2
 
@@ -32,6 +32,12 @@ class Building < ActiveRecord::Base
   def address
     # match Geocoder::Result::Google#formatted_address
     "#{street_number} #{street}, #{city}, #{state} #{zip}, #{country}"
+  end
+
+  def message_all text, from
+    self.users.without(from).each do |user|
+      # TODO send message
+    end
   end
 
   class << self

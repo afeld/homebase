@@ -13,4 +13,11 @@ class Unit < ActiveRecord::Base
   attr_accessible :building_id, :number
   has_many :users, dependent: :nullify
   belongs_to :building
+
+
+  def message_all text, from
+    self.users.without(from).each do |user|
+      # TODO send message
+    end
+  end
 end

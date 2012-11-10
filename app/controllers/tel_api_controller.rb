@@ -14,7 +14,7 @@ class TelApiController < ApplicationController
     when /^#?(unsub(scribe)?|quit|stop)\.?$/
       # unsubscribe
       user.destroy
-    when /^#?help|(help$)/
+    when /^#help|(help$)/
       HELP_TEXT
     when /^#list|(list$)/
       # TODO list users in building
