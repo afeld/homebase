@@ -34,30 +34,18 @@ class Building < ActiveRecord::Base
     "#{street_number} #{street}, #{city}, #{state} #{zip}, #{country}"
   end
 
-  def message_all text, from
-    self.users.without(from).each do |user|
-      Telapi::Message.create(user.mobile_number, TEL_NUMBER, text)
-    end
-  end
-
   class << self
-    def new_from_text text
-      result = Geocoder.search(text).first
-
-      if result
-        Building.new(
-          street_number: result.address_components_of_type(:street_number).first['short_name'],
-          street: result.address_components_of_type(:route).first['short_name'],
-          city: result.city,
-          state: result.state_code,
-          zip: result.postal_code,
-          country: result.country_code,
-          lat: result.latitude,
-          lng: result.longitude
-        )
-      else
-        nil
-      end
+    def create_from_result result
+      Building.new(
+        street_number: result.address_components_of_type(:street_number).first['short_name'],
+        street: result.address_components_of_type(:route).first['short_name'],
+        city: result.city,
+        state: result.state_code,
+        zip: result.postal_code,
+        country: result.country_code,
+        lat: result.latitude,
+        lng: result.longitude
+      )
     end
   end
 end

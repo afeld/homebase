@@ -34,5 +34,33 @@ class User < ActiveRecord::Base
     self.active = true
     self.save
   end
+  
+  def message_building text
+    Telapi::InboundXml.new do
+      self.building.users.without(self).each do |user|
+        Sms(
+          text,
+          from: TEL_NUMBER,
+          to: user.mobile_number
+        )
+      end
+    end
+  end
+  
+  def message_unit unit_num, text
+    # TODO fuzzy match?
+    unit = self.building.units.where(number: unit_num).first
+    # TODO handle no match
 
+    Telapi::InboundXml.new do
+      unit.users.without(self).each do |user|
+        Sms(
+          text,
+          from: TEL_NUMBER,
+          to: user.mobile_number
+        )
+      end
+    end
+  end
+    
 end
