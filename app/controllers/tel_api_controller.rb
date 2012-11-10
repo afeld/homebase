@@ -1,0 +1,2 @@
+class TelApiController < ApplicationController
+end
