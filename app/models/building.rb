@@ -36,7 +36,7 @@ class Building < ActiveRecord::Base
 
   def message_all text, from
     self.users.without(from).each do |user|
-      # TODO send message
+      Telapi::Message.create(user.mobile_number, TEL_NUMBER, text)
     end
   end
 
