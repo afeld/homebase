@@ -3,27 +3,22 @@ class TelApiController < ApplicationController
   
   UNSUB_KEYWORDS = ['unsub', 'unsubscribe', 'quit', 'stop', 'Stop', 'Quit', 'Unsubscribe', 'Unsub', 'Unsubscribe.', 'Unsub.', 'Stop.', 'Quit.']
   HELP_TEXT = "help"
-  UNSUBSCRIBE_MESSAGE
+  UNSUBSCRIBE_MESSAGE = "You have been unsubscribed. :("
   
   def receive_text
     message_body = params["Body"]
+    message_body.strip!
     from_number = params["From"]
     
     user = User.find_or_create_by_phone_number(from_number)
     unsubscribe = check_for_unsubscribe(message_body)
     
-    #case 1 - User is unsubscribe
-    if user and unsubscribe
-      user.disable_user
-      text = UNSUBSCRIBE_MESSAGE
+  
+  def message_unit(unit, message)
     
   end
   
-  def message_unit
-    
-  end
-  
-  def message_user
+  def message_user(user, message)
     
   end
   
