@@ -54,6 +54,8 @@ class User < ActiveRecord::Base
 
     Telapi::InboundXml.new do
       unit.users.without(self).each do |user|
+        puts user.mobile_number
+        puts user.mobile_number.class
         Sms(
           text,
           from: TEL_NUMBER,
