@@ -13,7 +13,7 @@
 #
 
 class User < ActiveRecord::Base
-  attr_accessible :first_name, :last_name, :mobile_number, :unit_id
+  attr_accessible :first_name, :last_name, :mobile_number, :unit_id, :last_message_dm_from, :last_message_dm_from_id
   belongs_to :unit
   has_one :building, through: :unit
   belongs_to :last_message_dm_from, class_name: 'User'
@@ -38,12 +38,12 @@ class User < ActiveRecord::Base
   
   def message_building text
     text = "##{self.unit.number}: #{text}"
+
     users = self.building.users.without(self)
+    users.update_all last_message_dm_from_id: nil
+
     Telapi::InboundXml.new do
       users.each do |u|
-        u.last_message_dm_from = nil
-        u.save!
-
         Sms(
           text,
           from: TEL_NUMBER,
@@ -60,13 +60,11 @@ class User < ActiveRecord::Base
 
     text = "DM ##{self.unit.number}: #{text}"
 
-    me = self
     users = unit.users.without(self)
+    users.update_all last_message_dm_from_id: self.id
+
     Telapi::InboundXml.new do
       users.each do |u|
-        u.last_message_dm_from = me
-        u.save!
-
         Sms(
           text,
           from: TEL_NUMBER,
