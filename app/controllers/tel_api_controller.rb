@@ -81,19 +81,33 @@ class TelApiController < ApplicationController
             )
           end
         when /^#list|(list$)/
-          user.building.list_users
+          puts "listing units"
+          text = user.building.units.map {|u|
+            "##{u.number}"
+          }.join(', ')
+
+          Telapi::InboundXml.new do
+            Sms(
+              text,
+              from: TEL_NUMBER,
+              to: from_number
+            )
+          end
         when /^@all/
           puts "messaging all residents of #{user.building.address}"
           user.building.message_all(message_body, user)
         when /^@(?<unit_number>\S+)/
           # TODO DM unit in building
         else
+          puts "messaging all"
           # TODO follow-up (all or DM)
           user.message_building message_body
         end
       end
 
-    render text: ix.response
+    resp = ix.response
+    puts resp.to_s # for debugging
+    render text: resp
   end
   
   def get_directory
