@@ -2,18 +2,17 @@
 #
 # Table name: buildings
 #
-#  id            :integer          not null, primary key
-#  name          :string(255)
-#  street_number :string(255)
-#  street        :string(255)
-#  city          :string(255)
-#  state         :string(255)
-#  zip           :string(255)
-#  country       :string(255)
-#  lat           :float
-#  lng           :float
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id         :integer          not null, primary key
+#  name       :string(255)
+#  street     :string(255)
+#  city       :string(255)
+#  state      :string(255)
+#  zip        :string(255)
+#  country    :string(255)
+#  lat        :float
+#  lng        :float
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 
 class Building < ActiveRecord::Base
@@ -21,8 +20,6 @@ class Building < ActiveRecord::Base
 
   has_many :units, dependent: :destroy
   has_many :users, through: :units
-
-  validate :state, length: 2
 
   geocoded_by :address
   reverse_geocoded_by :lat, :lng
@@ -37,8 +34,7 @@ class Building < ActiveRecord::Base
   class << self
     def create_from_result result
       Building.new(
-        street_number: result.address_components_of_type(:street_number).first['short_name'],
-        street: result.address_components_of_type(:route).first['short_name'],
+        street: result.address_data['addressLine'], # Bing-specific
         city: result.city,
         state: result.state_code,
         zip: result.postal_code,

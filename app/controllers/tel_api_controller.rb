@@ -9,9 +9,50 @@ class TelApiController < ApplicationController
     from_number = params["From"].to_s
     
     user = User.find_or_create_by_mobile_number(from_number)
+    unit = user.unit || user.build_unit
 
     ix =
-      if user.unit
+      # incomplete registration
+      if user.building.nil?
+        result = Geocoder.search(message_body).first
+        if result
+          building = Building.create_from_result(result)
+          unit.building = building
+          user.save!
+
+          puts "building created: #{building.address}"
+          Telapi::InboundXml.new do
+            Sms(
+              "What is your unit number?",
+              from: TEL_NUMBER,
+              to: from_number
+            )
+          end
+        else
+          puts "reg. failed"
+          Telapi::InboundXml.new do
+            Sms(
+              "Please respond with your full address, including unit number.",
+              from: TEL_NUMBER,
+              to: from_number
+            )
+          end
+        end
+
+      elsif user.unit.number.nil?
+        unit.number = message_body
+        unit.save!
+
+        puts "user registered"
+        Telapi::InboundXml.new do
+          Sms(
+            "Registered at ##{unit.number}, #{user.building.address}",
+            from: TEL_NUMBER,
+            to: from_number
+          )
+        end
+
+      else # already registered
         case message_body.downcase
         when /^#?(unsub(scribe)?|quit|stop)\.?$/
           # unsubscribe
@@ -37,33 +78,7 @@ class TelApiController < ApplicationController
         else
           # TODO follow-up (all or DM)
         end
-
-      else # no unit
-        # incomplete registration
-        result = Geocoder.search(message_body).first
-        user.unit = Unit.create_from_result(result) if result
-        
-        if user.unit
-          user.save!
-          puts "user registered"
-          Telapi::InboundXml.new do
-            Sms(
-              "Registered at ##{user.unit.number}, #{user.building.address}",
-              from: TEL_NUMBER,
-              to: from_number
-            )
-          end
-        else
-          puts "reg. failed"
-          Telapi::InboundXml.new do
-            Sms(
-              "Please respond with your full address, including unit number.",
-              from: TEL_NUMBER,
-              to: from_number
-            )
-          end
-        end
-      end 
+      end
 
     render text: ix.response
   end
