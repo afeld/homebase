@@ -38,6 +38,9 @@ class User < ActiveRecord::Base
   def message_building text
     Telapi::InboundXml.new do
       self.building.users.without(self).each do |user|
+        puts user.mobile_number
+        puts user.mobile_number.class
+        puts "IM HERE***********************"
         Sms(
           text,
           from: TEL_NUMBER,
