@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
   belongs_to :unit
   has_one :building, through: :unit
 
-  scope :without, lambda { |user| where('id <> ?', user.id) }
+  scope :without, lambda { |user| where('users.id <> ?', user.id) }
 
 
   def disable!
