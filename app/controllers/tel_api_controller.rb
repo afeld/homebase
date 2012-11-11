@@ -96,9 +96,9 @@ class TelApiController < ApplicationController
         when /^@all/
           puts "messaging all residents of #{user.building.address}"
           user.message_building message_body
-        when /^@(?<unit_number>\S+)/
+        when /^@(\S+)/
           # TODO DM unit in building
-          user.message_unit unit_number, message_body
+          user.message_unit $1, message_body
         else
           puts "messaging all"
           # TODO follow-up (all or DM)
