@@ -16,10 +16,12 @@
 #
 
 class Building < ActiveRecord::Base
-  attr_accessible :city, :country, :lat, :lng, :name, :state, :street, :street_number, :zip
+  attr_accessible :city, :country, :lat, :lng, :name, :state, :street, :zip
 
   has_many :units, dependent: :destroy
   has_many :users, through: :units
+
+  validates_presence_of :street, :city, :state, :zip, :country, :lat, :lng
 
   # geocoded_by :address
   # reverse_geocoded_by :lat, :lng
@@ -28,12 +30,12 @@ class Building < ActiveRecord::Base
 
   def address
     # match Geocoder::Result::Google#formatted_address
-    "#{street_number} #{street}, #{city}, #{state} #{zip}, #{country}"
+    "#{street}, #{city}, #{state} #{zip}, #{country}"
   end
 
   class << self
-    def create_from_result result
-      Building.create!(
+    def new_from_result result
+      Building.new(
         street: result.address_data['addressLine'], # Bing-specific
         city: result.city,
         state: result.state_code,

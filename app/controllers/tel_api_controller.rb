@@ -16,18 +16,30 @@ class TelApiController < ApplicationController
       if user.building.nil?
         result = Geocoder.search(message_body).first
         if result
-          building = Building.create_from_result(result)
-          unit.building = building
-          user.save!
+          building = Building.new_from_result(result)
+          if building.valid?
+            unit.building = building
+            user.save!
 
-          puts "building created: #{building.address}"
-          Telapi::InboundXml.new do
-            Sms(
-              "What is your unit number?",
-              from: TEL_NUMBER,
-              to: from_number
-            )
+            puts "building created: #{building.address}"
+            Telapi::InboundXml.new do
+              Sms(
+                "What is your unit number?",
+                from: TEL_NUMBER,
+                to: from_number
+              )
+            end
+          else
+            puts "invalid address"
+            Telapi::InboundXml.new do
+              Sms(
+                "Sorry, invalid address. Please try again.",
+                from: TEL_NUMBER,
+                to: from_number
+              )
+            end
           end
+
         else
           puts "reg. failed"
           Telapi::InboundXml.new do
