@@ -2,14 +2,15 @@
 #
 # Table name: users
 #
-#  id            :integer          not null, primary key
-#  unit_id       :integer
-#  first_name    :string(255)
-#  last_name     :string(255)
-#  mobile_number :string(255)
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  active        :boolean
+#  id                      :integer          not null, primary key
+#  unit_id                 :integer
+#  first_name              :string(255)
+#  last_name               :string(255)
+#  mobile_number           :string(255)
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  active                  :boolean
+#  last_message_dm_from_id :integer
 #
 
 require 'spec_helper'

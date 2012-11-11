@@ -2,14 +2,15 @@
 #
 # Table name: users
 #
-#  id            :integer          not null, primary key
-#  unit_id       :integer
-#  first_name    :string(255)
-#  last_name     :string(255)
-#  mobile_number :string(255)
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  active        :boolean
+#  id                      :integer          not null, primary key
+#  unit_id                 :integer
+#  first_name              :string(255)
+#  last_name               :string(255)
+#  mobile_number           :string(255)
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  active                  :boolean
+#  last_message_dm_from_id :integer
 #
 
 class User < ActiveRecord::Base
@@ -20,6 +21,17 @@ class User < ActiveRecord::Base
 
   scope :without, lambda { |user| where('users.id <> ?', user.id) }
 
+
+  def full_name
+    # handles where one is missing
+    [self.first_name, self.last_name].join(' ')
+  end
+
+  def full_name=(full)
+    split_name = full.split
+    self.last_name = split_name.pop
+    self.first_name = split_name.join(' ')
+  end
 
   def disable!
     self.active = false
