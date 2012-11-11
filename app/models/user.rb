@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
         Sms(
           text,
           from: TEL_NUMBER,
-          to: "7082963000" #user.mobile_number
+          to: user.mobile_number
         )
       end
     end
