@@ -103,7 +103,7 @@ class TelApiController < ApplicationController
           if user.last_message_dm_from
             puts "DM reply"
             # reply to DM
-            user.message_unit user.last_message_dm_from.unit.number, $2
+            user.message_unit user.last_message_dm_from.unit.number, message_body
           else
             puts "messaging all"
             user.message_building message_body
