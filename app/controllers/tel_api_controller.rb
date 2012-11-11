@@ -33,7 +33,7 @@ class TelApiController < ApplicationController
             puts "invalid address"
             Telapi::InboundXml.new do
               Sms(
-                "Sorry, invalid address. Please try again.",
+                "Please enter your full, valid street address.",
                 from: TEL_NUMBER,
                 to: from_number
               )
@@ -52,7 +52,7 @@ class TelApiController < ApplicationController
         end
 
       elsif user.unit.number.nil?
-        unit.number = message_body
+        unit.number = message_body.sub(/^(#|apt\.?|ste\.?|suite|unit)\s*/i, '')
         unit.save!
 
         puts "user registered"
@@ -81,7 +81,7 @@ class TelApiController < ApplicationController
             )
           end
         when /^#list|(list$)/
-          # TODO list users in building
+          user.building.list_users
         when /^@all/
           puts "messaging all residents of #{user.building.address}"
           user.building.message_all(message_body, user)
@@ -89,6 +89,7 @@ class TelApiController < ApplicationController
           # TODO DM unit in building
         else
           # TODO follow-up (all or DM)
+          user.message_building message_body
         end
       end
 

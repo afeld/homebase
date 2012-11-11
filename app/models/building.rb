@@ -33,6 +33,20 @@ class Building < ActiveRecord::Base
     "#{street}, #{city}, #{state} #{zip}, #{country}"
   end
 
+  def list_users
+    text = self.units.map {|unit|
+      "##{unit.number}"
+    }.join(', ')
+
+    Telapi::InboundXml.new do
+      Sms(
+        text,
+        from: TEL_NUMBER,
+        to: user.mobile_number
+      )
+    end
+  end
+
   class << self
     def new_from_result result
       Building.new(
