@@ -98,13 +98,16 @@ class TelApiController < ApplicationController
           user.message_building message_body
         when /^@(\S+)\s+(.*)/
           # DM unit in building
-          text = "DM ##{unit.number}: #{$2}"
-          user.message_unit $1, text
+          user.message_unit $1, $2
         else
-          puts "messaging all"
-          # TODO follow-up (all or DM)
-          text = "##{unit.number}: #{message_body}"
-          user.message_building text
+          if user.last_message_dm_from
+            puts "DM reply"
+            # reply to DM
+            user.message_unit user.last_message_dm_from.unit.number, $2
+          else
+            puts "messaging all"
+            user.message_building message_body
+          end
         end
       end
 

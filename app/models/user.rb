@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
   attr_accessible :first_name, :last_name, :mobile_number, :unit_id
   belongs_to :unit
   has_one :building, through: :unit
+  belongs_to :last_message_dm_from, class_name: 'User'
 
   scope :without, lambda { |user| where('users.id <> ?', user.id) }
 
@@ -36,9 +37,13 @@ class User < ActiveRecord::Base
   end
   
   def message_building text
+    text = "##{self.unit.number}: #{text}"
     users = self.building.users.without(self)
     Telapi::InboundXml.new do
       users.each do |u|
+        u.last_message_dm_from = nil
+        u.save!
+
         Sms(
           text,
           from: TEL_NUMBER,
@@ -53,9 +58,15 @@ class User < ActiveRecord::Base
     unit = self.building.units.find_by_number(unit_num)
     # TODO handle no match
 
+    text = "DM ##{self.unit.number}: #{text}"
+
+    me = self
     users = unit.users.without(self)
     Telapi::InboundXml.new do
       users.each do |u|
+        u.last_message_dm_from = me
+        u.save!
+
         Sms(
           text,
           from: TEL_NUMBER,

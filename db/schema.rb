@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121110235502) do
+ActiveRecord::Schema.define(:version => 20121111021627) do
 
   create_table "buildings", :force => true do |t|
     t.string   "name"
@@ -38,9 +38,10 @@ ActiveRecord::Schema.define(:version => 20121110235502) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "mobile_number"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
     t.boolean  "active"
+    t.integer  "last_message_dm_from_id"
   end
 
 end
