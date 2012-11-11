@@ -39,9 +39,6 @@ class User < ActiveRecord::Base
     users = self.building.users.without(self)
     Telapi::InboundXml.new do
       users.each do |u|
-        puts u.mobile_number
-        puts u.mobile_number.class
-        puts "IM HERE***********************"
         Sms(
           text,
           from: TEL_NUMBER,
@@ -53,15 +50,16 @@ class User < ActiveRecord::Base
   
   def message_unit unit_num, text
     # TODO fuzzy match?
-    unit = self.building.units.where(number: unit_num).first
+    unit = self.building.units.find_by_number(unit_num)
     # TODO handle no match
 
+    users = unit.users.without(self)
     Telapi::InboundXml.new do
-      unit.users.without(self).each do |user|
+      users.each do |u|
         Sms(
           text,
           from: TEL_NUMBER,
-          to: user.mobile_number
+          to: u.mobile_number
         )
       end
     end
