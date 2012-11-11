@@ -22,7 +22,7 @@ class Building < ActiveRecord::Base
   has_many :users, through: :units
 
   geocoded_by :address
-  reverse_geocoded_by :lat, :lng
+  # reverse_geocoded_by :lat, :lng
   after_validation :geocode, :reverse_geocode
 
 
@@ -33,7 +33,7 @@ class Building < ActiveRecord::Base
 
   class << self
     def create_from_result result
-      Building.new(
+      Building.create!(
         street: result.address_data['addressLine'], # Bing-specific
         city: result.city,
         state: result.state_code,
