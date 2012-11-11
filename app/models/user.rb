@@ -34,7 +34,12 @@ class User < ActiveRecord::Base
   end
 
   def name_with_initial
-    "#{self.first_name} #{self.last_name.to_s[0]}".strip
+    initial = self.last_name.to_s[0]
+    if initial
+      "#{self.first_name} #{initial}."
+    else
+      self.first_name
+    end
   end
 
   def disable!
