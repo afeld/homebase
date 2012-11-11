@@ -35,11 +35,15 @@ class Building < ActiveRecord::Base
 
   class << self
     def new_from_result result
-      Building.new(
-        street: result.address_data['addressLine'], # Bing-specific
+      # find existing building by street+zip
+      building = self.find_or_initialize_by_street_and_zip(
+        result.address_data['addressLine'], # Bing-specific
+        result.postal_code
+      )
+
+      building.update_attributes(
         city: result.city,
         state: result.state_code,
-        zip: result.postal_code,
         country: result.country_code,
         lat: result.latitude,
         lng: result.longitude
