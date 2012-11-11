@@ -36,15 +36,16 @@ class User < ActiveRecord::Base
   end
   
   def message_building text
+    users = self.building.users.without(self)
     Telapi::InboundXml.new do
-      self.building.users.without(self).each do |user|
-        puts user.mobile_number
-        puts user.mobile_number.class
+      users.each do |u|
+        puts u.mobile_number
+        puts u.mobile_number.class
         puts "IM HERE***********************"
         Sms(
           text,
           from: TEL_NUMBER,
-          to: user.mobile_number
+          to: u.mobile_number
         )
       end
     end
@@ -57,8 +58,6 @@ class User < ActiveRecord::Base
 
     Telapi::InboundXml.new do
       unit.users.without(self).each do |user|
-        puts user.mobile_number
-        puts user.mobile_number.class
         Sms(
           text,
           from: TEL_NUMBER,
