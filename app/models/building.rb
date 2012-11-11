@@ -21,9 +21,9 @@ class Building < ActiveRecord::Base
   has_many :units, dependent: :destroy
   has_many :users, through: :units
 
-  geocoded_by :address
+  # geocoded_by :address
   # reverse_geocoded_by :lat, :lng
-  after_validation :geocode, :reverse_geocode
+  # after_validation :geocode, :reverse_geocode
 
 
   def address
