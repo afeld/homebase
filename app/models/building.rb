@@ -48,6 +48,8 @@ class Building < ActiveRecord::Base
         lat: result.latitude,
         lng: result.longitude
       )
+
+      building
     end
   end
 end
