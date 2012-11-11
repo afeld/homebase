@@ -55,6 +55,19 @@ class TelApiController < ApplicationController
         unit.number = message_body.sub(/^(#|apt\.?|ste\.?|suite|unit)\s*/i, '')
         unit.save!
 
+        puts "unit set"
+        Telapi::InboundXml.new do
+          Sms(
+            "What's your name?",
+            from: TEL_NUMBER,
+            to: from_number
+          )
+        end
+
+      elsif user.full_name.blank?
+        user.full_name = message_body
+        user.save!
+
         puts "user registered"
         Telapi::InboundXml.new do
           Sms(
