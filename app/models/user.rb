@@ -33,6 +33,10 @@ class User < ActiveRecord::Base
     self.first_name = split_name.join(' ')
   end
 
+  def name_with_initial
+    "#{self.first_name} #{self.last_name.to_s[0]}".strip
+  end
+
   def disable!
     self.active = false
     self.save
@@ -49,7 +53,7 @@ class User < ActiveRecord::Base
   end
   
   def message_building text
-    text = "##{self.unit.number}: #{text}"
+    text = "#{self.name_with_initial} (##{self.unit.number}): #{text}"
 
     users = self.building.users.without(self)
     users.update_all last_message_dm_from_id: nil
@@ -70,7 +74,7 @@ class User < ActiveRecord::Base
     unit = self.building.units.find_by_number(unit_num)
     # TODO handle no match
 
-    text = "DM ##{self.unit.number}: #{text}"
+    text = "DM from #{self.name_with_initial} (##{self.unit.number}): #{text}"
 
     users = unit.users.without(self)
     users.update_all last_message_dm_from_id: self.id
