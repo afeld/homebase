@@ -10,8 +10,6 @@
     %th City
     %th State
     %th Zip
-    %th Lat
-    %th Lng
     %th
     %th
 
@@ -22,7 +20,5 @@
       %td= building.city
       %td= building.state
       %td= building.zip
-      %td= building.lat
-      %td= building.lng
       %td= link_to 'Edit', edit_building_path(building)
       %td= link_to 'X', building, method: :delete, data: { confirm: 'Are you sure?' }
