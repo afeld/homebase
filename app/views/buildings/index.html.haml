@@ -1,17 +1,17 @@
 %h1 HomeBase Buildings
 
+%p= link_to 'New Building', new_building_path
+
+
 %table
   %tr
     %th Name
-    %th Street number
     %th Street
     %th City
     %th State
     %th Zip
-    %th Country
     %th Lat
     %th Lng
-    %th
     %th
     %th
 
@@ -22,13 +22,7 @@
       %td= building.city
       %td= building.state
       %td= building.zip
-      %td= building.country
       %td= building.lat
       %td= building.lng
-      %td= link_to 'Show', building
       %td= link_to 'Edit', edit_building_path(building)
-      %td= link_to 'Destroy', building, method: :delete, data: { confirm: 'Are you sure?' }
-
-%br
-
-= link_to 'New Building', new_building_path
+      %td= link_to 'X', building, method: :delete, data: { confirm: 'Are you sure?' }
