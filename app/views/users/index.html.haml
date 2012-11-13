@@ -5,18 +5,16 @@
 %table
   %tr
     %th Unit
-    %th First name
-    %th Last name
-    %th Mobile number
+    %th Name
+    %th Number
     %th
     %th
     %th
 
   - @users.each do |user|
     %tr
-      %td= user.unit_id
-      %td= user.first_name
-      %td= user.last_name
+      %td= "#{user.unit_id || "???"}" 
+      %td= link_to "#{user.first_name} #{user.last_name}", user
       %td= user.mobile_number[-4..-1] if user.mobile_number
       %td= link_to 'Show', user
       %td= link_to 'Edit', edit_user_path(user)

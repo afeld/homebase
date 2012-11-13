@@ -1,6 +1,47 @@
 #content {
 	width: 650px;
+	background-color: #fff;
 	border: 5px solid #333;
 	padding: 3em;
 	margin: auto;
+}
+
+table {
+	width:100%;
+	margin:1em auto;
+	border-collapse:collapse;
+}
+
+td {
+	color:#678197;
+	border-bottom:1px solid #e5eff8;
+	border-left:1px solid #e5eff8;
+	border-right:1px solid #e5eff8;
+	padding:.3em 1em;
+	text-align:left;
+}
+
+th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #6D929B;
+	border-right: 1px solid #e5eff8;
+	border-bottom: 1px solid #C1DAD7;
+	border-left: 1px solid #e5eff8;
+	border-top: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 6px 6px 12px;
+	background: #f4f9fe;
+}
+
+tr.even td{
+	background:#fff;
+	padding: 6px 6px 6px 12px;
+}
+
+tr.odd td{
+	background:#f7fbff;
+	padding: 6px 6px 6px 12px;
 }
