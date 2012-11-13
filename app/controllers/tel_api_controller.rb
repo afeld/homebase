@@ -1,7 +1,7 @@
 class TelApiController < ApplicationController
   skip_before_filter :verify_authenticity_token
   
-  HELP_TEXT = "INSTRUCTIONS\n@all - messages everyone in your building\n@[unit] - messages a particular unit\n#list - directory\n#quit - to unsubscribe\n#name - reset your name"
+  HELP_TEXT = "INSTRUCTIONS\n@all - messages everyone in your building\n@[unit] - messages a particular unit\n#list - building directory\n#name - reset your name\n#quit - to unsubscribe"
   UNSUBSCRIBE_MESSAGE = "You have been unsubscribed. :("
   
   def receive_text
