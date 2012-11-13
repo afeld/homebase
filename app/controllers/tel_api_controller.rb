@@ -1,7 +1,7 @@
 class TelApiController < ApplicationController
   skip_before_filter :verify_authenticity_token
   
-  HELP_TEXT = "help\n@all messgages everyone\n@[unit] messages a particular unit\n#list to get a directory\n#quit to unsubscribe"
+  HELP_TEXT = "INSTRUCTIONS\n@all messaages everyone in your building\n@[unit] messages a particular unit\n#list to get a directory\n#quit to unsubscribe"
   UNSUBSCRIBE_MESSAGE = "You have been unsubscribed. :("
   
   def receive_text
@@ -71,7 +71,7 @@ class TelApiController < ApplicationController
         puts "user registered"
         Telapi::InboundXml.new do
           Sms(
-            "Registered at ##{unit.number}, #{user.building.address}",
+            "Registered at ##{unit.number}, #{user.building.address}. Text #help for a full list of instructions.",
             from: TEL_NUMBER,
             to: from_number
           )
@@ -106,6 +106,18 @@ class TelApiController < ApplicationController
               to: from_number
             )
           end
+        when /^#name+ (.*)$/
+          puts "setting name for user"
+          user.full_name = $1
+          user.save!
+
+          Telapi::InboundXml.new do
+            Sms(
+              "Your name has been has been changed to" + user.full_name,
+              from: TEL_NUMBER,
+              to: from_number
+            )
+          end  
         when /^@all\s+(.*)$/
           puts "messaging all residents of #{user.building.address}"
           user.message_building $1
@@ -127,10 +139,6 @@ class TelApiController < ApplicationController
     resp = ix.response
     puts resp.to_s # for debugging
     render text: resp
-  end
-  
-  def get_directory
-    
   end
   
 end
