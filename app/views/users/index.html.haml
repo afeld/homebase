@@ -1,4 +1,6 @@
-%h1 Listing users
+%h1 HomeBase Users
+
+%p= link_to 'New User', new_user_path
 
 %table
   %tr
@@ -15,11 +17,10 @@
       %td= user.unit_id
       %td= user.first_name
       %td= user.last_name
-      %td= user.mobile_number
+      %td= user.mobile_number[-4..-1] if user.mobile_number
       %td= link_to 'Show', user
       %td= link_to 'Edit', edit_user_path(user)
-      %td= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }
+      %td= link_to 'X', user, method: :delete, data: { confirm: 'Are you sure?' }
 
 %br
 
-= link_to 'New User', new_user_path
