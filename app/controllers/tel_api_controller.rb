@@ -1,7 +1,7 @@
 class TelApiController < ApplicationController
   skip_before_filter :verify_authenticity_token
   
-  HELP_TEXT = "INSTRUCTIONS\n@all messaages everyone in your building\n@[unit] messages a particular unit\n#list to get a directory\n#quit to unsubscribe"
+  HELP_TEXT = "INSTRUCTIONS\n@all - messages everyone in your building\n@[unit] - messages a particular unit\n#list - directory\n#quit - to unsubscribe\n#name - reset your name"
   UNSUBSCRIBE_MESSAGE = "You have been unsubscribed. :("
   
   def receive_text
@@ -113,7 +113,7 @@ class TelApiController < ApplicationController
 
           Telapi::InboundXml.new do
             Sms(
-              "Your name has been has been changed to" + user.full_name,
+              "Your name has been has been changed to " + user.full_name,
               from: TEL_NUMBER,
               to: from_number
             )
